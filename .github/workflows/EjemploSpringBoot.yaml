@@ -23,6 +23,6 @@ jobs:
    - name: Esperar y probar
      run: |
       sleep 10
-      curl -i http:/localhost8080/api/v1/saludo
+      curl -i http:/localhost:8080/api/v1/saludo
    - name: Detener Spring Boot
      run: pkill -f 'org.springframework.boot.loader.JarLauncher'
