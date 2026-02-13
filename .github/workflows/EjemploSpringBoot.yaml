@@ -26,6 +26,6 @@ jobs:
    - name: Esperar
      run: sleep 10
    - name: Enviar un request a la app
-     run: curl -i http:/localhost:8080/api/v1/saludo
+     run: curl -i http://localhost:8080/api/v1/saludo
    - name: Detener Spring Boot
-     run: pkill -9 $(cat springboot.pid)
+     run: kill -9 $(cat springboot.pid)
