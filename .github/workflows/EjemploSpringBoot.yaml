@@ -4,7 +4,7 @@ on:
     branches: [main]
   pull_request:
 jobs:
- build:
+ tests_builds:
   runs-on: ubuntu-latest
   steps:
    - uses: actions/checkout@v3
@@ -15,14 +15,17 @@ jobs:
       distribution: 'temurin'
    - name: Build usando Maven
      run: mvn clean install
-   - name: Executing app Spring Boot
-     run: mvn spring-boot:run &
-     env:
-      SPRING_PROFILES_ACTIVE: dev
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-   - name: Esperar y probar
+   - name: Build oficial
+     run: mvn clean package -DskipTests
+   - name: Executing app Spring Boot en background
      run: |
-      sleep 10
-      curl -i http:/localhost:8080/api/v1/saludo
+      java -jar target/simple-server-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev &
+      echo $! > springboot.pid
+     env:
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+   - name: Esperar
+     run: sleep 10
+   - name: Enviar un request a la app
+     run: curl -i http:/localhost:8080/api/v1/saludo
    - name: Detener Spring Boot
-     run: pkill -f 'org.springframework.boot.loader.JarLauncher'
+     run: pkill -9 $(cat springboot.pid)
