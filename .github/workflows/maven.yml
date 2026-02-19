@@ -20,7 +20,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
      matrix:
-       os: [ubuntu-latest, windows]
+       os: [ubuntu-latest, windows-latest]
        java: [25,25]
     steps:
     - name: Checkout del código (clonando...)
